@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://marcdaddy.vercel.app/sitemap.xml
+Sitemap: https://marcdaddy.com/sitemap.xml

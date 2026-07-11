@@ -1,5 +1,5 @@
 import { gsap, ScrollTrigger } from './motion'
-import { FRAMES } from '../config'
+import { FRAMES, MEDIA_VERSION } from '../config'
 
 type FrameSet = typeof FRAMES.desktop
 
@@ -34,7 +34,7 @@ export class HeroScrub {
   }
 
   private frameUrl(i: number): string {
-    return `${this.set.dir}/hero_${String(i + 1).padStart(4, '0')}.webp`
+    return `${this.set.dir}/hero_${String(i + 1).padStart(4, '0')}.webp?v=${MEDIA_VERSION}`
   }
 
   /**
@@ -62,7 +62,7 @@ export class HeroScrub {
               const img = new Image()
               img.onload = () => resolve(img)
               img.onerror = () => reject(new Error('img decode failed'))
-              img.src = this.frameUrl(i) + (attempt ? `?retry=${attempt}` : '')
+              img.src = this.frameUrl(i) + (attempt ? `&retry=${attempt}` : '')
             })
             return
           } catch {
