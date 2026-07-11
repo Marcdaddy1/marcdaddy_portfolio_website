@@ -52,10 +52,11 @@ async function boot(): Promise<void> {
   let titleChars: HTMLElement[] = []
   let finaleChars: HTMLElement[] = []
 
+  initVideos()
+
   if (reduced) {
     document.documentElement.classList.add('reduced-motion')
     setStatsFinal()
-    initVideos(false) // posters only, no autoplay
   } else {
     const lenis = initSmoothScroll()
     if (import.meta.env.DEV) {
@@ -66,7 +67,6 @@ async function boot(): Promise<void> {
     }
     titleChars = splitChars(titleEl, titleEl.textContent ?? '')
     finaleChars = splitChars(finaleEl, finaleEl.textContent ?? '')
-    initVideos(true)
   }
   fitHeroTitle()
 

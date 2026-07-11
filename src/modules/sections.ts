@@ -89,9 +89,13 @@ export function initWorkCards(motionAllowed: boolean): void {
   })
 }
 
-/** Lazy-load background videos and play/pause on viewport enter/leave. */
-export function initVideos(autoplay: boolean): void {
-  if (!autoplay) return // reduced motion: poster images only
+/**
+ * Lazy-load background videos and play/pause on viewport enter/leave.
+ * Runs for everyone, including prefers-reduced-motion — owner's call: these
+ * are muted decorative brand clips, and gating them made the site look
+ * broken (poster-only) on any machine with OS-level reduced motion.
+ */
+export function initVideos(): void {
   const videos = document.querySelectorAll<HTMLVideoElement>('video.media-bg')
   const io = new IntersectionObserver(
     (entries) => {
