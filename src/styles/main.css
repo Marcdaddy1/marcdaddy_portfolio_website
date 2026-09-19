@@ -175,8 +175,9 @@ body {
   display: inline-block;
   will-change: transform;
 }
-.hero-title .char.space {
-  width: 0.28em;
+.hero-title .word {
+  display: inline-block;
+  white-space: nowrap;
 }
 .hero-sub {
   margin-top: 18px;
@@ -379,6 +380,23 @@ body {
   color: var(--accent);
   border-color: var(--accent);
 }
+.venture-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: 14px;
+}
+.venture-socials a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: color 0.25s ease;
+}
+.venture-socials a:hover {
+  color: var(--accent);
+}
 
 /* Work cards */
 .work-grid {
@@ -472,8 +490,9 @@ body {
 .finale-headline .char {
   display: inline-block;
 }
-.finale-headline .char.space {
-  width: 0.28em;
+.finale-headline .word {
+  display: inline-block;
+  white-space: nowrap;  /* a line may break between inline-blocks; keep words whole */
 }
 .finale-sub {
   max-width: 52ch;
@@ -526,7 +545,8 @@ body {
 }
 .footer-socials {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 12px 24px;
 }
 .footer-socials a {
   color: var(--muted);
