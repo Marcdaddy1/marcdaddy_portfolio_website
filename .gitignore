@@ -25,3 +25,6 @@ vite.config.ts.timestamp-*
 # NOTE: dist/ is intentionally COMMITTED — the marcdaddy.com VPS container
 # serves the built dist/ folder directly from this repo. Run `npm run build`
 # and commit dist/ before pushing a deployable change.
+
+# graphify knowledge graph output
+graphify-out/
