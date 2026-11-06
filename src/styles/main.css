@@ -105,7 +105,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 22px clamp(20px, 4vw, 48px);
-  mix-blend-mode: difference;
+  background: linear-gradient(rgba(5, 5, 5, 0.88), rgba(5, 5, 5, 0));
 }
 .site-header a {
   color: var(--cream);
@@ -119,7 +119,7 @@ body {
   font-size: 18px;
 }
 .header-cta {
-  border: 1px solid rgba(245, 241, 232, 0.35);
+  border: 1px solid rgba(245, 241, 232, 0.5);
   padding: 8px 18px;
   border-radius: 999px;
   transition: border-color 0.25s ease, color 0.25s ease;
@@ -150,7 +150,6 @@ body {
   inset: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   padding: 0 clamp(20px, 4vw, 48px) clamp(28px, 6vh, 64px);
   pointer-events: none;
 }
@@ -178,9 +177,6 @@ body {
   font-size: clamp(0.95rem, 1.4vw, 1.2rem);
   color: var(--muted);
   letter-spacing: 0.04em;
-}
-.hero-sub .accent {
-  color: var(--accent);
 }
 .hero-micro {
   margin-top: 10px;
@@ -214,12 +210,14 @@ body {
   border-bottom: 1px solid rgba(245, 241, 232, 0.08);
 }
 .stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: clamp(32px, 5vw, 64px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(32px, 5vw, 56px);
   max-width: 1200px;
   margin: 0 auto;
 }
+.stat { flex: 0 1 180px; }
 .stat {
   text-align: center;
 }
@@ -365,7 +363,7 @@ body {
   text-decoration: none;
   font-size: 13px;
   letter-spacing: 0.12em;
-  border-bottom: 1px solid rgba(245, 241, 232, 0.3);
+  border-bottom: 1px solid rgba(245, 241, 232, 0.5);
   padding-bottom: 2px;
   transition: color 0.25s ease, border-color 0.25s ease;
 }
@@ -399,7 +397,7 @@ body {
 }
 .work-card {
   position: relative;
-  border: 1px solid rgba(245, 241, 232, 0.3);
+  border: 1px solid rgba(245, 241, 232, 0.5);
   background: rgba(5, 5, 5, 0.55);
   padding: clamp(24px, 3vw, 40px);
   min-height: 320px;
@@ -415,15 +413,6 @@ body {
 }
 .work-card:hover {
   border-color: var(--accent);
-}
-.work-card-index {
-  position: absolute;
-  top: 24px;
-  left: 24px;
-  font-family: var(--display);
-  color: var(--accent);
-  font-size: 14px;
-  letter-spacing: 0.2em;
 }
 .work-card-name {
   font-family: var(--display);
@@ -529,6 +518,12 @@ body {
 .site-footer {
   margin-top: auto;
   width: 100%;
+  /* The footer sits outside <main> so the contentinfo landmark is exposed,
+     which also puts it outside the page gutter every section inherits. */
+  padding-inline: clamp(20px, 4vw, 48px);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -678,16 +673,6 @@ html {
   color: rgba(245, 241, 232, 0.6);
 }
 
-/* --- Work card visual slot ------------------------------------- */
-.work-card-shot {
-  aspect-ratio: 16 / 10;
-  margin-bottom: auto;
-  border: 1px solid rgba(245, 241, 232, 0.12);
-  border-radius: 2px;
-  background-color: #0b0f0d;
-  background-size: cover;
-  background-position: top center;
-}
 
 /* --- Scroll progress rail: the pin gave no sense of remaining -- */
 .scroll-progress {
@@ -704,9 +689,6 @@ html {
 }
 
 /* --- Grids: auto-fit orphaned the last item at 1440px ---------- */
-@media (min-width: 1100px) {
-  .stats-grid { grid-template-columns: repeat(5, 1fr); }
-}
 @media (min-width: 768px) {
   .work-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -727,18 +709,40 @@ html {
   .skip-link { transition: none; }
 }
 
-/* --- Work card shots -------------------------------------------- */
-/* Dormant until real screenshots exist. Drop 16:10 images at the
-   paths below, add class="has-work-shots" to <html>, and the cards
-   gain their visual evidence with no other change. */
-.work-card-shot { display: none; }
-.has-work-shots .work-card-shot { display: block; }
-.has-work-shots .work-card-shot[data-shot='foodinsight'] { background-image: url('/work/foodinsight.webp'); }
-.has-work-shots .work-card-shot[data-shot='wms'] { background-image: url('/work/wms.webp'); }
-.has-work-shots .work-card-shot[data-shot='leres'] { background-image: url('/work/leres.webp'); }
-.has-work-shots .work-card-shot[data-shot='soldisc'] { background-image: url('/work/soldisc.webp'); }
 
 /* --- Remaining tap targets measured at 14-17px tall -------------- */
 .venture-socials { gap: 2px 20px; }
 .venture-socials a { padding: 10px 0; }
 .header-mark { padding: 8px 0; }
+
+/* --- Screen-reader-only text -------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Header CTA was a 32px target --------------------------- */
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* --- Mobile fetched a DESKTOP frame for the canvas fallback -- */
+@media (max-width: 767px) {
+  .hero-canvas { background-image: url('/frames/mobile/hero_0001.webp?v=3'); }
+}
+
+/* --- The JS sets .reduced-motion; CSS never consumed it ------ */
+.reduced-motion .grain { animation: none; }
+.reduced-motion .hero-scroll-hint span { display: none; }
+.reduced-motion .icon-arrow,
+.reduced-motion .skip-link { transition: none; }

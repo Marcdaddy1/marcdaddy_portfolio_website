@@ -60,24 +60,18 @@ function initScrollProgress(): void {
 }
 
 /**
- * Give the pin something to deliver. The orbit held one frozen screen of copy
- * for its whole 300vh; the supporting line now arrives partway through the
- * rotation so the scroll buys information, not just spectacle.
+ * Give the pin something to deliver: the supporting line fades in over the
+ * first fifth of the rotation, so the scroll buys information rather than
+ * just spectacle. Driven by the pin's own progress — an independent
+ * ScrollTrigger on the pinned element gets its start displaced by the pin
+ * spacer and never plays inside the pin at all.
  */
-function stageHeroCopy(): void {
-  const micro = document.querySelector('.hero-micro')
+function stageHeroCopy(progress: number): void {
+  const micro = document.querySelector<HTMLElement>('.hero-micro')
   if (!micro) return
-  gsap.from(micro, {
-    opacity: 0,
-    y: 16,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: heroEl,
-      start: 'top top',
-      end: '+=90%',
-      scrub: 0.5,
-    },
-  })
+  const t = Math.min(1, Math.max(0, progress / 0.2))
+  micro.style.opacity = String(t)
+  micro.style.transform = `translateY(${(1 - t) * 14}px)`
 }
 
 async function boot(): Promise<void> {
@@ -134,9 +128,9 @@ async function boot(): Promise<void> {
 
   scrub.drawFrame(0)
   finishPreloader()
-  scrub.attachScrub(heroEl)
+  stageHeroCopy(0) // set the start state before the first scroll event
+  scrub.attachScrub(heroEl, stageHeroCopy)
   initScrollProgress()
-  stageHeroCopy()
 
   revealNow(titleChars, 0.35)
   revealOnScroll(finaleEl, finaleChars)

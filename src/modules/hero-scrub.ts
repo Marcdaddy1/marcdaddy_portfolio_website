@@ -168,8 +168,14 @@ export class HeroScrub {
     this.draw()
   }
 
-  /** Pin the hero and scrub one full orbit across the pin distance. */
-  attachScrub(heroEl: HTMLElement): void {
+  /**
+   * Pin the hero and scrub one full orbit across the pin distance.
+   * `onProgress` receives the pin's own 0-1 progress. Anything staged against
+   * the pin must ride this, not a second ScrollTrigger on the same element:
+   * the pin spacer displaces an independent trigger's start, which silently
+   * pushed the staged copy past the end of the pin.
+   */
+  attachScrub(heroEl: HTMLElement, onProgress?: (p: number) => void): void {
     const loop = () => {
       this.draw()
       this.rafId = requestAnimationFrame(loop)
@@ -190,6 +196,7 @@ export class HeroScrub {
       },
       onUpdate: () => {
         this.targetIndex = Math.round(state.frame) % this.set.count
+        onProgress?.(state.frame / Math.max(1, this.set.count - 1))
       },
     })
   }
