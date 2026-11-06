@@ -16,7 +16,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
 // Seedance 2 outputs 24fps natively — extract at 24/12 so no frame is a duplicate.
 const SETS = [
-  { dir: 'public/frames/desktop', fps: 24, width: 1440 },
+  { dir: 'public/frames/desktop', fps: 12, width: 1440 },
   { dir: 'public/frames/mobile', fps: 12, width: 720 },
 ]
 

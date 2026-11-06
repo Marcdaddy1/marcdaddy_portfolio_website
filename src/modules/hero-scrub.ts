@@ -38,15 +38,25 @@ export class HeroScrub {
   }
 
   /**
-   * Preload all frames. NEVER rejects: each frame gets 3 attempts
+   * Preload frames. NEVER rejects: each frame gets 3 attempts
    * (fetch+createImageBitmap, then <img> fallback); a frame that still fails
    * stays null and draw() substitutes the nearest loaded neighbour. One flaky
    * request must not cost the whole scrub.
+   *
+   * Resolves as soon as `readyAfter` frames are decoded — the rest keep
+   * downloading behind an already-usable page. Frames are claimed in order,
+   * so the ones that resolve first are the ones the scrub shows first.
    */
-  async load(onProgress: (pct: number) => void): Promise<void> {
+  async load(onProgress: (pct: number) => void, readyAfter?: number): Promise<void> {
     const { count } = this.set
     this.frames = new Array(count).fill(null)
     let done = 0
+
+    const threshold = Math.max(1, Math.min(readyAfter ?? count, count))
+    let release: () => void = () => {}
+    const ready = new Promise<void>((resolve) => {
+      release = resolve
+    })
 
     const acquire = async (i: number): Promise<void> => {
       for (let attempt = 0; attempt < 3; attempt++) {
@@ -79,14 +89,38 @@ export class HeroScrub {
         const i = next++
         await acquire(i)
         done++
-        onProgress(Math.round((done / count) * 100))
+        if (done <= threshold) onProgress(Math.round((done / threshold) * 100))
+        if (done >= threshold) release()
       }
     }
-    await Promise.all(Array.from({ length: CONCURRENCY }, worker))
 
-    const missing = this.frames.reduce((n, f) => n + (f ? 0 : 1), 0)
-    if (missing) {
-      console.warn(`[hero-scrub] ${missing}/${count} frames failed to load; using nearest-frame fallback`)
+    Promise.all(Array.from({ length: CONCURRENCY }, worker)).then(() => {
+      const missing = this.frames.reduce((n, f) => n + (f ? 0 : 1), 0)
+      if (missing) {
+        console.warn(`[hero-scrub] ${missing}/${count} frames failed to load; using nearest-frame fallback`)
+      }
+      release() // every frame settled; nothing left to wait on
+    })
+
+    return ready
+  }
+
+  /**
+   * Reduced-motion path: decode frame 0 only. A static hero costs one image
+   * instead of the whole sequence, which is the point of reducing motion.
+   */
+  async loadFirstFrameOnly(): Promise<void> {
+    this.frames = new Array(this.set.count).fill(null)
+    try {
+      const res = await fetch(this.frameUrl(0))
+      this.frames[0] = await createImageBitmap(await res.blob())
+    } catch {
+      this.frames[0] = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const img = new Image()
+        img.onload = () => resolve(img)
+        img.onerror = () => reject(new Error('img decode failed'))
+        img.src = this.frameUrl(0)
+      }).catch(() => null as unknown as HTMLImageElement)
     }
   }
 

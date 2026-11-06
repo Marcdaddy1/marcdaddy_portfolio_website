@@ -2,7 +2,7 @@
 
 Personal portfolio site for Marc (AegeanPulse). Awwwards-style: a canvas
 frame-sequence hero orbit scrubbed by scroll, GSAP ScrollTrigger + Lenis,
-ink-black / emerald / cream palette, big condensed display type (Anton).
+ink-black / emerald / cream palette, big condensed display type (Bebas Neue).
 
 Deployed on Vercel. Repo: `Marcdaddy1/marcdaddy_portfolio_website`.
 
@@ -37,8 +37,3 @@ when the real assets aren't present.
 Run `npm run build` (it type-checks), then load the page and scrub the hero
 end to end — a dropped or out-of-order frame only shows under real scrolling.
 
-## Gotcha
-
-This machine has **reduced-motion ON**, so scroll animations render static
-here. Gate fallbacks behind a mounted check and switch motion back on before
-demoing.

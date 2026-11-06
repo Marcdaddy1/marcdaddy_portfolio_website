@@ -143,7 +143,7 @@ body {
   height: 100%;
   display: block;
   /* JS-off / pre-load fallback: show the first orbit frame */
-  background: url('/frames/desktop/hero_0001.webp') center / cover no-repeat #050505;
+  background: url('/frames/desktop/hero_0001.webp?v=3') center / cover no-repeat #050505;
 }
 .hero-content {
   position: absolute;
@@ -153,13 +153,6 @@ body {
   justify-content: flex-end;
   padding: 0 clamp(20px, 4vw, 48px) clamp(28px, 6vh, 64px);
   pointer-events: none;
-}
-.hero-eyebrow {
-  font-size: clamp(0.7rem, 1vw, 0.85rem);
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 14px;
 }
 .hero-title {
   font-family: var(--display);
@@ -193,7 +186,7 @@ body {
   margin-top: 10px;
   max-width: 60ch;
   font-size: clamp(0.8rem, 1vw, 0.9rem);
-  color: rgba(245, 241, 232, 0.38);
+  color: rgba(245, 241, 232, 0.6);
   letter-spacing: 0.04em;
 }
 .hero-scroll-hint {
@@ -406,7 +399,7 @@ body {
 }
 .work-card {
   position: relative;
-  border: 1px solid rgba(245, 241, 232, 0.14);
+  border: 1px solid rgba(245, 241, 232, 0.3);
   background: rgba(5, 5, 5, 0.55);
   padding: clamp(24px, 3vw, 40px);
   min-height: 320px;
@@ -444,7 +437,7 @@ body {
   font-size: 0.95rem;
 }
 .work-card-copy {
-  color: rgba(245, 241, 232, 0.38);
+  color: rgba(245, 241, 232, 0.6);
   font-size: 0.85rem;
 }
 .work-card-arrow {
@@ -461,7 +454,7 @@ body {
   border-top: 1px solid rgba(245, 241, 232, 0.08);
 }
 .about-copy {
-  max-width: 70ch;
+  max-width: 65ch;
   font-size: clamp(1.05rem, 1.8vw, 1.5rem);
   line-height: 1.6;
   color: var(--cream);
@@ -526,7 +519,7 @@ body {
   background: #34d39a;
 }
 .btn-ghost {
-  border: 1px solid rgba(245, 241, 232, 0.35);
+  border: 1px solid rgba(245, 241, 232, 0.5);
   color: var(--cream);
 }
 .btn-ghost:hover {
@@ -561,7 +554,7 @@ body {
 }
 .footer-note {
   font-size: 12px;
-  color: rgba(245, 241, 232, 0.3);
+  color: rgba(245, 241, 232, 0.5);
   letter-spacing: 0.1em;
 }
 
@@ -602,3 +595,150 @@ body {
     display: none;
   }
 }
+
+/* --- Browser surfaces: selection, caret, scrollbar, focus ------ */
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+html {
+  caret-color: var(--accent);
+  scrollbar-color: rgba(245, 241, 232, 0.25) var(--ink);
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 241, 232, 0.22);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 70;
+  transform: translateY(-200%);
+  background: var(--accent);
+  color: var(--ink);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 999px;
+  transition: transform 0.2s ease;
+}
+.skip-link:focus-visible { transform: translateY(0); }
+
+/* --- Drawn arrow icon, replacing the unicode glyph ------------- */
+.icon-arrow {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  transition: transform 0.3s ease;
+}
+.work-card:hover .icon-arrow,
+.venture-link:hover .icon-arrow { transform: translateX(5px); }
+.venture-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+/* --- Hero CTA: no conversion point existed above 96% depth ----- */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+  pointer-events: auto;
+}
+
+/* --- Mid-page CTA after Selected work -------------------------- */
+.section-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: clamp(40px, 6vh, 72px);
+}
+.section-cta-note,
+.finale-note {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: rgba(245, 241, 232, 0.6);
+}
+
+/* --- Work card visual slot ------------------------------------- */
+.work-card-shot {
+  aspect-ratio: 16 / 10;
+  margin-bottom: auto;
+  border: 1px solid rgba(245, 241, 232, 0.12);
+  border-radius: 2px;
+  background-color: #0b0f0d;
+  background-size: cover;
+  background-position: top center;
+}
+
+/* --- Scroll progress rail: the pin gave no sense of remaining -- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: var(--accent);
+  z-index: 45;
+  pointer-events: none;
+}
+
+/* --- Grids: auto-fit orphaned the last item at 1440px ---------- */
+@media (min-width: 1100px) {
+  .stats-grid { grid-template-columns: repeat(5, 1fr); }
+}
+@media (min-width: 768px) {
+  .work-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- Tap targets: footer links measured 14px tall -------------- */
+.footer-socials { gap: 4px 24px; }
+.footer-socials a { padding: 10px 0; }
+
+@media (max-width: 767px) {
+  /* hero micro-line collided with the SCROLL hint on one baseline */
+  .hero-micro { padding-right: 96px; }
+  /* margin-top:auto opened a ~250px void above the mobile footer */
+  .site-footer { margin-top: clamp(48px, 8vh, 96px); padding-top: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-arrow { transition: none; }
+  .skip-link { transition: none; }
+}
+
+/* --- Work card shots -------------------------------------------- */
+/* Dormant until real screenshots exist. Drop 16:10 images at the
+   paths below, add class="has-work-shots" to <html>, and the cards
+   gain their visual evidence with no other change. */
+.work-card-shot { display: none; }
+.has-work-shots .work-card-shot { display: block; }
+.has-work-shots .work-card-shot[data-shot='foodinsight'] { background-image: url('/work/foodinsight.webp'); }
+.has-work-shots .work-card-shot[data-shot='wms'] { background-image: url('/work/wms.webp'); }
+.has-work-shots .work-card-shot[data-shot='leres'] { background-image: url('/work/leres.webp'); }
+.has-work-shots .work-card-shot[data-shot='soldisc'] { background-image: url('/work/soldisc.webp'); }
+
+/* --- Remaining tap targets measured at 14-17px tall -------------- */
+.venture-socials { gap: 2px 20px; }
+.venture-socials a { padding: 10px 0; }
+.header-mark { padding: 8px 0; }
